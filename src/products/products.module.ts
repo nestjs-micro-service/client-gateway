@@ -20,3 +20,5 @@ import { PRODUCT_SERVICE, envs } from '../config';
   providers: [],
 })
 export class ProductsModule { }
+
+//Podemos dejar la definición de los MS con los que va a interactuar el gateway acá o por fuera (en el app.module por ej).

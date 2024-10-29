@@ -5,6 +5,9 @@ interface EnvVars {
   PORT: number;
   PRODUCTS_MICROSERVICE_PORT: number;
   PRODUCTS_MICROSERVICE_HOST: string;
+  ORDERS_MICROSERVICE_PORT: number;
+  ORDERS_MICROSERVICE_HOST: string;
+
   // MONGO_URI: string;
   // DATABASE_URL: string;
 }
@@ -15,6 +18,9 @@ const envsSchema = joi
     PORT: joi.number().required(),
     PRODUCTS_MICROSERVICE_PORT: joi.number().required(),
     PRODUCTS_MICROSERVICE_HOST: joi.string().required(),
+    ORDERS_MICROSERVICE_PORT: joi.number().required(),
+    ORDERS_MICROSERVICE_HOST: joi.string().required(),
+
     //El required() es para que no deje pasar la variable de entorno si no está definida
     // DATABASE_URL: joi.string().required(),
     // MONGO_URI: joi.string().required(),
@@ -33,6 +39,8 @@ export const envs = {
   port: envVars.PORT,
   productsMicroservicePort: envVars.PRODUCTS_MICROSERVICE_PORT,
   productsMicroserviceHost: envVars.PRODUCTS_MICROSERVICE_HOST,
+  ordersMicroservicePort: envVars.ORDERS_MICROSERVICE_PORT,
+  ordersMicroserviceHost: envVars.ORDERS_MICROSERVICE_HOST,
   // databaseUrl: envVars.DATABASE_URL,
   // mongoUri: envVars.MONGO_URI,
 };

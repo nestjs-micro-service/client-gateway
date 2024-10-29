@@ -29,12 +29,12 @@ export class ProductsController {
   }
 
   @Get()
-  getProducts(@Query() paginationDto: PaginationDto) {
+  findProducts(@Query() paginationDto: PaginationDto) {
     return this.productsClient.send({ md: 'findAllProducts' }, paginationDto);
   }
 
   @Get(':id')
-  async getProductById(@Param('id') id: number) {
+  async findProductById(@Param('id') id: number) {
     try {
       const product = await firstValueFrom(
         this.productsClient.send({ cmd: 'findOneProduct' }, { id }),

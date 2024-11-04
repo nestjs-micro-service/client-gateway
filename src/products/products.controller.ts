@@ -10,7 +10,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { PRODUCT_SERVICE } from '../config';
+import { NATS_SERVICE } from '../config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { PaginationDto } from '../common';
 import { catchError, firstValueFrom } from 'rxjs';
@@ -19,25 +19,23 @@ import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
-  constructor(
-    @Inject(PRODUCT_SERVICE) private readonly productsClient: ClientProxy,
-  ) { }
+  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) { }
 
   @Post()
   createProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productsClient.send({ cmd: 'createProduct' }, createProductDto);
+    return this.client.send({ cmd: 'createProduct' }, createProductDto);
   }
 
   @Get()
   findProducts(@Query() paginationDto: PaginationDto) {
-    return this.productsClient.send({ md: 'findAllProducts' }, paginationDto);
+    return this.client.send({ cmd: 'findAllProducts' }, paginationDto);
   }
 
   @Get(':id')
   async findProductById(@Param('id') id: number) {
     try {
       const product = await firstValueFrom(
-        this.productsClient.send({ cmd: 'findOneProduct' }, { id }),
+        this.client.send({ cmd: 'findOneProduct' }, { id }),
       );
       return product;
     } catch (error) {
@@ -47,7 +45,7 @@ export class ProductsController {
 
   @Delete(':id')
   deleteProduct(@Param('id') id: string) {
-    return this.productsClient.send({ cmd: 'deleteProduct' }, { id }).pipe(
+    return this.client.send({ cmd: 'deleteProduct' }, { id }).pipe(
       catchError((err) => {
         throw new RpcException(err);
       }),
@@ -59,7 +57,7 @@ export class ProductsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,
   ) {
-    return this.productsClient
+    return this.client
       .send({ cmd: 'updateProduct' }, { ...updateProductDto, id })
       .pipe(
         catchError((err) => {

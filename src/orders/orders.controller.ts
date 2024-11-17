@@ -21,8 +21,15 @@ export class OrdersController {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) { }
 
   @Post()
-  createOrder(@Body() createOrderDto: CreateOrderDto) {
-    return this.client.send({ cmd: 'createOrder' }, createOrderDto);
+  async createOrder(@Body() createOrderDto: CreateOrderDto) {
+    try {
+      const order = await firstValueFrom(
+        this.client.send({ cmd: 'createOrder' }, createOrderDto),
+      );
+      return order;
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
   @Get()

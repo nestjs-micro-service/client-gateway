@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -15,12 +16,14 @@ import { NATS_SERVICE } from '../config';
 import { firstValueFrom } from 'rxjs';
 import { OrderPaginationDto, StatusDto } from './dto';
 import { PaginationDto } from '../common';
+import { AuthGuard } from '../auth/guard/auth.guard';
 
 @Controller('orders')
 export class OrdersController {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) { }
 
   @Post()
+  @UseGuards(AuthGuard)
   async createOrder(@Body() createOrderDto: CreateOrderDto) {
     try {
       const order = await firstValueFrom(
@@ -33,6 +36,7 @@ export class OrdersController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   async findOrders(@Query() orderPaginationDto: OrderPaginationDto) {
     try {
       const orders = await firstValueFrom(
@@ -45,6 +49,7 @@ export class OrdersController {
   }
 
   @Get('id/:id')
+  @UseGuards(AuthGuard)
   async findOrderById(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const order = await firstValueFrom(
@@ -58,6 +63,7 @@ export class OrdersController {
   }
 
   @Get(':status')
+  @UseGuards(AuthGuard)
   async findByStatus(
     @Param() statusDto: StatusDto,
     @Query() paginationDto: PaginationDto,
@@ -73,6 +79,7 @@ export class OrdersController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   async changeStatus(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() statusDto: StatusDto,

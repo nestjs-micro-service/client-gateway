@@ -1,30 +1,13 @@
-## Cliente Gateway
-El gateway es el punto de comunicación entre nuestros clientes y nuestros servicios. Es el encargado de recibir las peticiones, enviarlas a los servicios correspondientes y devolver la respuesta al cliente.
+## Client Gateway
 
+## Description
+The Client-Gateway repository serves as an intermediary layer between the client applications and the backend microservices. It is responsible for handling client requests, performing necessary transformations, and routing them through NATS server to the appropriate backend microservice.
 
-## Dev
+## Architecture
 
-1. Clonar el repositorio
-2. Instalar dependencias
-3. Crear un archivo `.env` basado en el `env.template`
-4. Levantar el servidor de NATS
-```
-docker run -d --name nats-server -p 4222:4222 -p 8222:8222 nats
-```
-5. Tener levantados los microservicios  que se van a consumir
-6. Levantar proyecto con `npm run start:dev`
+![Image](https://github.com/user-attachments/assets/04a65ee4-d813-4c3c-9136-6914679a1aaf)
 
+## Usage
+To use this repository, follow the setup instructions provided in the README file of the Products-launcher repository.
 
-
-## Nats
-```
-docker run -d --name nats-server -p 4222:4222 -p 8222:8222 nats
-```
-
-
-## PROD
-
-Ejecutar
-```
-docker build -f dockerfile.prod -t client-gateway .
-```
+[Products-launcher repository](https://github.com/nestjs-micro-service/products-launcher) 
